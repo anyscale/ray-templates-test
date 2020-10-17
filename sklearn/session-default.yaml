@@ -28,13 +28,12 @@ target_utilization_fraction: 0.8
 idle_timeout_minutes: 5
 
 # Cloud-provider specific configuration.
+# Cloud-provider specific configuration.
 provider:
-    type: aws
-    region: us-west-2
-    # Availability zone(s), comma-separated, that nodes may be launched in.
-    # Nodes are currently spread between zones by a round-robin approach,
-    # however this implementation detail should not be relied upon.
-    availability_zone: us-west-2a,us-west-2b
+    type: gcp
+    region: us-west1
+    availability_zone: us-west1-a
+    project_id: null # Globally unique project id
 
 # How Ray will authenticate with newly launched nodes.
 auth:
@@ -48,38 +47,6 @@ docker:
     image: anyscale/ray-ml:latest
     container_name: ray_container
     pull_before_run: false
-
-# Provider-specific config for the head node, e.g. instance type. By default
-# Ray will auto-configure unspecified fields such as SubnetId and KeyName.
-# For more documentation on available fields, see:
-# http://boto3.readthedocs.io/en/latest/reference/services/ec2.html#EC2.ServiceResource.create_instances
-head_node:
-    InstanceType: m5.2xlarge
-    ImageId: ami-00537d6d959d3b1d5
-
-    # You can provision additional disk space with a conf as follows
-    BlockDeviceMappings:
-        - DeviceName: /dev/sda1
-          Ebs:
-              VolumeSize: 300
-
-
-# Provider-specific config for worker nodes, e.g. instance type. By default
-# Ray will auto-configure unspecified fields such as SubnetId and KeyName.
-# For more documentation on available fields, see:
-# http://boto3.readthedocs.io/en/latest/reference/services/ec2.html#EC2.ServiceResource.create_instances
-worker_nodes:
-    InstanceType: m5.2xlarge
-    ImageId: ami-00537d6d959d3b1d5
-
-    BlockDeviceMappings:
-        - DeviceName: /dev/sda1
-          Ebs:
-              VolumeSize: 300
-
-    # Run workers on spot by default. Comment this out to use on-demand.
-    InstanceMarketOptions:
-        MarketType: spot
 
 # List of shell commands to run to set up nodes.
 setup_commands:
